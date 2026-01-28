@@ -1,4 +1,4 @@
-import Login from '@/app/components/Login';
+import LoginForm from './LoginForm';
 
 export const metadata = {
   title: 'Login - eSignHub',
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function LoginPage() {
-  return <Login />;
+  return <LoginForm />;
 }

@@ -1,4 +1,4 @@
-import Signup from '@/app/components/Signup';
+import SignupForm from './SignupForm';
 
 export const metadata = {
   title: 'Sign Up - eSignHub',
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function SignupPage() {
-  return <Signup />;
+  return <SignupForm />;
 }

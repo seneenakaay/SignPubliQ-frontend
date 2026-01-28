@@ -5,7 +5,7 @@ import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 const Hero = () => {
     return (
-        <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28 bg-white dark:bg-black">
+        <section className="relative overflow-hidden pt-8 pb-10 lg:pt-12 lg:pb-14 bg-white dark:bg-black">
             <div className="mx-auto max-w-7xl px-6 lg:px-8">
                 <div className="lg:grid lg:grid-cols-12 lg:gap-16 items-center">
 
@@ -27,32 +27,8 @@ const Hero = () => {
                             Streamline your agreements and close deals in minutes, not days.
                         </p>
 
-                        <div className="mt-8 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-                            <Link
-                                href="/signup"
-                                className="w-full sm:w-auto rounded-lg bg-primary px-8 py-3.5 text-base font-semibold text-white shadow-sm transition-all hover:bg-blue-600 hover:shadow-lg flex items-center justify-center gap-2 group"
-                            >
-                                Start Free Trial
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                            </Link>
-                            <Link
-                                href="#demo"
-                                className="w-full sm:w-auto rounded-lg px-8 py-3.5 text-base font-semibold text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors flex items-center justify-center"
-                            >
-                                View Demo
-                            </Link>
-                        </div>
+                        {/* Buttons and Trust Signals removed as per request */}
 
-                        <div className="mt-8 flex items-center justify-center lg:justify-start gap-6 text-sm font-medium text-zinc-500 dark:text-zinc-500">
-                            <div className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-500" />
-                                <span>No credit card required</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <CheckCircle2 className="w-4 h-4 text-green-500" />
-                                <span>14-day free trial</span>
-                            </div>
-                        </div>
                     </div>
 
                     {/* Right Image */}

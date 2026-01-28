@@ -191,7 +191,7 @@ const Signup = () => {
               Account Created!
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mb-6">
-              Your eSignHub account has been successfully created. You can now sign in.
+              Your SignPubliQ account has been successfully created. You can now sign in.
             </p>
 
             <Link
@@ -295,7 +295,7 @@ const Signup = () => {
               Create your free
             </h1>
             <h2 className="text-3xl md:text-4xl font-bold text-[#3e95e5] mt-1">
-              eSignHub account
+              SignPubliQ account
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mt-4 text-sm md:text-base">
               Get started with digital signatures today
@@ -332,13 +332,13 @@ const Signup = () => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    placeholder="John"
+                    placeholder="First name"
                     className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e95e5] dark:bg-slate-700 dark:text-white transition"
                   />
                 </div>
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                <label htmlFor="LastName" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Last Name
                 </label>
                 <div className="relative">
@@ -349,7 +349,7 @@ const Signup = () => {
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    placeholder="Doe"
+                    placeholder="Last name"
                     className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e95e5] dark:bg-slate-700 dark:text-white transition"
                   />
                 </div>
@@ -369,7 +369,7 @@ const Signup = () => {
                   name="phoneNumber"
                   value={formData.phoneNumber}
                   onChange={handleInputChange}
-                  placeholder="+1 (555) 123-4567"
+                  placeholder="+91 98765 43210"
                   className="w-full pl-10 pr-4 py-2.5 border border-slate-300 dark:border-slate-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#3e95e5] dark:bg-slate-700 dark:text-white transition"
                 />
               </div>

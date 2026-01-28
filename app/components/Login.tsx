@@ -181,7 +181,7 @@ const Login = () => {
               Welcome back to
             </h1>
             <h2 className="text-3xl md:text-4xl font-bold text-[#3e95e5] mt-2">
-              eSignHub
+              SignPubliQ
             </h2>
             <p className="text-slate-600 dark:text-slate-400 mt-4 text-sm md:text-base">
               Sign in to your account to continue

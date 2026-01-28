@@ -91,7 +91,7 @@ const Footer = () => {
                 </div>
                 <div className="mt-16 border-t border-zinc-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-zinc-50/10">
                     <p className="text-xs leading-5 text-zinc-500 dark:text-zinc-500">
-                        &copy; 2026 SignPubliQ, Inc. All rights reserved.
+                        &copy; 2025 SignPubliQ, Inc. All rights reserved.
                     </p>
                 </div>
             </div>

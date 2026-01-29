@@ -12,7 +12,10 @@ interface SignupFormData {
   password: string;
   confirmPassword: string;
   otpCode: string;
+  verificationToken?: string;
 }
+
+import AuthService from '../../lib/api';
 
 interface PasswordStrength {
   score: number;
@@ -143,12 +146,19 @@ const Signup = () => {
     }
 
     setLoading(true);
-    // Simulate sending OTP to email
-    setTimeout(() => {
+    setLoading(true);
+    console.log('[Signup] Initiating signup for:', formData.email);
+
+    try {
+      await AuthService.initiateSignup(formData.email);
+      console.log('[Signup] OTP sent successfully');
       setShowEmailOTP(true);
       setSuccess('OTP sent to your email');
+    } catch (err: any) {
+      setError(err.message || 'Failed to send OTP');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleVerifyEmailOTP = async () => {
@@ -165,14 +175,28 @@ const Signup = () => {
     }
 
     setLoading(true);
-    // Simulate OTP verification
-    setTimeout(() => {
+    setLoading(true);
+    console.log('[Signup] Verifying email with OTP:', emailOTPCode);
+
+    try {
+      const response = await AuthService.verifyEmail(formData.email, emailOTPCode);
+      console.log('[Signup] Email verification response:', response);
+
+      // Assuming response contains verificationToken as per guide
+      if (response.verificationToken) {
+        console.log('[Signup] Received verification token:', response.verificationToken);
+        setFormData(prev => ({ ...prev, verificationToken: response.verificationToken }));
+      }
+
       setEmailVerified(true);
       setShowEmailOTP(false);
       setEmailOTPCode('');
       setSuccess('Email verified successfully!');
+    } catch (err: any) {
+      setError(err.message || 'Invalid OTP');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -191,12 +215,36 @@ const Signup = () => {
 
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      setStep('otp');
-      setSuccess('A verification code has been sent to your email');
+    if (!formData.verificationToken) {
+      setError('Email verification token missing. Please verify email again.');
+      return;
+    }
+
+    setLoading(true);
+
+    console.log('[Signup] Completing account creation...');
+
+    try {
+      const signupData = {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phoneNumber, // Note: API expects "phone", form has "phoneNumber"
+        password: formData.password,
+        verificationToken: formData.verificationToken
+      };
+      console.log('[Signup] Sending signup data:', signupData);
+
+      await AuthService.completeSignup(signupData);
+
+      console.log('[Signup] Account created successfully');
+      setStep('complete');
+      setSuccess('Account created successfully!');
+    } catch (err: any) {
+      setError(err.message || 'Signup failed');
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleOTPSubmit = async (e: React.FormEvent) => {
@@ -282,7 +330,7 @@ const Signup = () => {
                 <label htmlFor="otpCode" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
                   Verification Code
                 </label>
-                <input 
+                <input
                   id="otpCode"
                   type="text"
                   name="otpCode"
@@ -545,19 +593,18 @@ const Signup = () => {
                     <span className="text-xs font-medium text-slate-600 dark:text-slate-400">
                       Password Strength
                     </span>
-                    <span className={`text-xs font-semibold ${
-                      passwordStrength.color === 'bg-red-500'
-                        ? 'text-red-600'
-                        : passwordStrength.color === 'bg-orange-500'
+                    <span className={`text-xs font-semibold ${passwordStrength.color === 'bg-red-500'
+                      ? 'text-red-600'
+                      : passwordStrength.color === 'bg-orange-500'
                         ? 'text-orange-600'
                         : passwordStrength.color === 'bg-yellow-500'
-                        ? 'text-yellow-600'
-                        : passwordStrength.color === 'bg-lime-500'
-                        ? 'text-lime-600'
-                        : passwordStrength.color === 'bg-green-500'
-                        ? 'text-green-600'
-                        : 'text-emerald-700'
-                    }`}>
+                          ? 'text-yellow-600'
+                          : passwordStrength.color === 'bg-lime-500'
+                            ? 'text-lime-600'
+                            : passwordStrength.color === 'bg-green-500'
+                              ? 'text-green-600'
+                              : 'text-emerald-700'
+                      }`}>
                       {passwordStrength.label}
                     </span>
                   </div>

@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, Loader } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import AuthService from '../../lib/api';
 
 interface LoginFormData {
   email: string;
@@ -12,6 +14,7 @@ interface LoginFormData {
 }
 
 const Login = () => {
+  const router = useRouter();
   const [formData, setFormData] = useState<LoginFormData>({
     email: '',
     password: '',
@@ -57,12 +60,21 @@ const Login = () => {
 
     setLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      // Simulate MFA requirement
-      setMfaRequired(true);
+    setLoading(true);
+    console.log('[Login] Attempting login for:', formData.email);
+
+    try {
+      await AuthService.login(formData.email, formData.password);
+      console.log('[Login] Login successful, redirecting...');
+      setSuccess('Login successful!');
+      // Short delay to show success message
+      setTimeout(() => {
+        router.push('/');
+      }, 1000);
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
       setLoading(false);
-    }, 1000);
+    }
   };
 
   const handleMFASubmit = async (e: React.FormEvent) => {

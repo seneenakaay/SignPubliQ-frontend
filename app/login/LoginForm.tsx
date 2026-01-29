@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { Mail, Lock, Eye, EyeOff, Loader } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Mail, Lock, Eye, EyeOff, Loader, X } from 'lucide-react';
 import Link from 'next/link';
 
 interface LoginFormData {
@@ -25,6 +25,13 @@ const Login = () => {
   const [mfaRequired, setMfaRequired] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  // Forgot password modal state
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotError, setForgotError] = useState('');
+  const [forgotSuccess, setForgotSuccess] = useState('');
+  const [forgotLoading, setForgotLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -88,6 +95,43 @@ const Login = () => {
       // Here you would redirect to dashboard
     }, 1000);
   };
+
+  // Forgot password: send reset link (simulated)
+  const handleSendReset = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    setForgotError('');
+    setForgotSuccess('');
+
+    if (!forgotEmail) {
+      setForgotError('Email is required');
+      return;
+    }
+
+    if (!validateEmail(forgotEmail)) {
+      setForgotError('Please enter a valid email address');
+      return;
+    }
+
+    setForgotLoading(true);
+
+    // Simulate sending reset email
+    setTimeout(() => {
+      setForgotSuccess('If this email is registered, a reset link has been sent.');
+      setForgotLoading(false);
+      setForgotEmail('');
+      // Auto-close modal after a short delay
+      setTimeout(() => setShowForgotModal(false), 1800);
+    }, 1000);
+  };
+
+  // Close modal on Escape
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (ev.key === 'Escape' && showForgotModal) setShowForgotModal(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [showForgotModal]);
 
   if (mfaRequired) {
     return (
@@ -164,7 +208,16 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 px-4 py-6">
       <div className="w-full max-w-md">
+        <div className="mb-4">
+          <Link
+            href="/"
+            className="inline-flex items-center text-[#3e95e5] hover:text-[#2d7bc9] font-semibold transition"
+          >
+            ← Back to Home
+          </Link>
+        </div>
         <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-8 md:p-10">
+
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white">
@@ -219,12 +272,13 @@ const Login = () => {
                 <label htmlFor="password" className="block text-sm font-medium text-slate-700 dark:text-slate-300">
                   Password
                 </label>
-                <Link
-                  href="/forgot-password"
+                <button
+                  type="button"
+                  onClick={() => setShowForgotModal(true)}
                   className="text-xs text-[#3e95e5] hover:text-[#2d7bc9] transition"
                 >
                   Forgot?
-                </Link>
+                </button>
               </div>
               <div className="relative">
                 <Lock className="absolute left-3 top-3.5 w-5 h-5 text-slate-400" />
@@ -281,6 +335,75 @@ const Login = () => {
             </p>
           </div>
         </div>
+
+        {showForgotModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div className="fixed inset-0 bg-black/40" onClick={() => setShowForgotModal(false)} />
+            <div className="bg-white dark:bg-slate-800 rounded-lg shadow-lg p-6 w-full max-w-md z-10">
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Forgot Password?</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Enter your registered email ID to receive the password reset link</p>
+                </div>
+                <button
+                  onClick={() => setShowForgotModal(false)}
+                  className="text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                  aria-label="Close"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {forgotError && (
+                <div className="mb-4 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                  <p className="text-red-800 dark:text-red-400 text-sm">{forgotError}</p>
+                </div>
+              )}
+
+              {forgotSuccess && (
+                <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+                  <p className="text-green-800 dark:text-green-400 text-sm">{forgotSuccess}</p>
+                </div>
+              )}
+
+              <form onSubmit={handleSendReset} className="space-y-4">
+                <div>
+                  <label htmlFor="forgotEmail" className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
+                    Registered Email
+                  </label>
+                  <input
+                    id="forgotEmail"
+                    type="email"
+                    name="forgotEmail"
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    required
+                    className={`w-full px-4 py-2 border ${forgotError ? 'border-red-400 dark:border-red-700' : 'border-slate-300 dark:border-slate-600'} rounded-lg focus:outline-none focus:ring-2 ${forgotError ? 'focus:ring-red-400' : 'focus:ring-[#3e95e5]'} dark:bg-slate-700 dark:text-white transition`}
+                  />
+                </div>
+
+                <div className="flex items-center justify-end">
+                  <button
+                    type="submit"
+                    disabled={forgotLoading}
+                    className="bg-[#3e95e5] hover:bg-[#2d7bc9] disabled:bg-slate-400 text-white font-semibold px-4 py-2 rounded-lg transition"
+                  >
+                    {forgotLoading ? (
+                      <>
+                        <Loader className="w-4 h-4 mr-2 animate-spin inline-block" />
+                        Sending...
+                      </>
+                    ) : (
+                      'Send reset link'
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

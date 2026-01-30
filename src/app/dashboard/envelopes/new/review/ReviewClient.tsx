@@ -51,14 +51,27 @@ export default function ReviewClient() {
       
       setSendSuccess(true);
       
-      // Clear localStorage after successful send
+      // Create envelope record for manage page
+      const newEnvelope = {
+        id: `env-${Date.now()}`,
+        documentName: 'New Document Envelope',
+        sharedWith: recipients.map(r => r.email),
+        createdOn: new Date().toISOString(),
+        updatedOn: new Date().toISOString(),
+        owner: 'You',
+        status: 'Sent' as const,
+      };
+      
+      localStorage.setItem('lastSentEnvelope', JSON.stringify(newEnvelope));
+      
+      // Clear envelope data after successful send
       localStorage.removeItem('envelopeRecipients');
       localStorage.removeItem('signatureFields');
       localStorage.removeItem('uploadedDocument');
       
-      // Redirect after 2 seconds
+      // Redirect to manage page after 2 seconds
       setTimeout(() => {
-        window.location.href = '/dashboard';
+        window.location.href = '/dashboard/envelopes/manage';
       }, 2000);
     } catch (error) {
       console.error('Error sending envelope:', error);

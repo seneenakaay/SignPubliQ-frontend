@@ -161,13 +161,12 @@ export default function RecipientsClient() {
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              className={`rounded-lg px-4 py-2 text-sm font-semibold ${canContinue ? 'bg-[#2d7bc9] text-white hover:bg-[#2563a0]' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
-              disabled={!canContinue}
+            <Link
+              href="/dashboard/envelopes/new/signature-fields"
+              className={`rounded-lg px-4 py-2 text-sm font-semibold ${canContinue ? 'bg-[#2d7bc9] text-white hover:bg-[#2563a0]' : 'bg-slate-200 text-slate-500 cursor-not-allowed pointer-events-none'}`}
             >
-              Next Step
-            </button>
+              Next: Place Signature Fields
+            </Link>
             <Link href="/dashboard/envelopes/new" className="text-sm text-slate-500 hover:text-[#2d7bc9]">
               Back to upload
             </Link>

@@ -74,6 +74,15 @@ export default function EnvelopeCreateClient() {
         version: 2,
         willConvertToPdf,
       });
+
+      // Store the document URL for preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          localStorage.setItem('uploadedDocument', e.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
     });
 
     const nextItems = [...files, ...incomingItems];

@@ -220,13 +220,22 @@ export default function EnvelopeCreateClient() {
             </div>
 
             <div className="mt-6 flex flex-col gap-2">
-              <button
-                type="button"
-                className={`rounded-lg px-4 py-2 text-sm font-semibold ${files.length > 0 ? 'bg-[#2d7bc9] text-white hover:bg-[#2563a0]' : 'bg-slate-200 text-slate-500 cursor-not-allowed'}`}
-                disabled={files.length === 0}
-              >
-                Continue to Recipients
-              </button>
+              {files.length > 0 ? (
+                <Link
+                  href="/dashboard/envelopes/new/recipients"
+                  className="rounded-lg px-4 py-2 text-center text-sm font-semibold bg-[#2d7bc9] text-white hover:bg-[#2563a0]"
+                >
+                  Continue to Recipients
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="rounded-lg px-4 py-2 text-sm font-semibold bg-slate-200 text-slate-500 cursor-not-allowed"
+                  disabled
+                >
+                  Continue to Recipients
+                </button>
+              )}
               <Link href="/dashboard" className="text-center text-sm text-slate-500 hover:text-[#2d7bc9]">
                 Cancel and return to dashboard
               </Link>

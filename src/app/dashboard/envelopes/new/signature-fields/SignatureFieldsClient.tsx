@@ -124,6 +124,23 @@ export default function SignatureFieldsClient() {
 
   const canContinue = placedFields.length > 0;
 
+  useEffect(() => {
+    // Save to localStorage for review page
+    localStorage.setItem('signatureFields', JSON.stringify(placedFields));
+  }, [placedFields]);
+
+  useEffect(() => {
+    // Save recipients to localStorage
+    const storedRecipients = localStorage.getItem('envelopeRecipients');
+    if (!storedRecipients) {
+      // If no recipients found, they should have been saved from previous page
+      const recipientsData = sessionStorage.getItem('currentRecipients');
+      if (recipientsData) {
+        localStorage.setItem('envelopeRecipients', recipientsData);
+      }
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-white">
       {/* Header */}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Plus, Trash2, UserPlus } from 'lucide-react';
 
@@ -40,6 +40,11 @@ export default function RecipientsClient() {
       prev.map((recipient) => (recipient.id === id ? { ...recipient, [field]: value } : recipient))
     );
   };
+
+  useEffect(() => {
+    // Save recipients to localStorage for review page
+    localStorage.setItem('envelopeRecipients', JSON.stringify(recipients));
+  }, [recipients]);
 
   const canContinue = recipients.every((recipient) =>
     recipient.email && recipient.firstName && recipient.lastName && recipient.role

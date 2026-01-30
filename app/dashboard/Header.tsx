@@ -2,10 +2,13 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Bell, User, Settings, HelpCircle, LogOut, ChevronDown, Menu } from 'lucide-react';
+import AuthService from '@/lib/api';
 
 export default function Header({ username = 'John Doe', onToggleSidebar }: { username?: string; onToggleSidebar?: () => void }) {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -15,6 +18,11 @@ export default function Header({ username = 'John Doe', onToggleSidebar }: { use
     document.addEventListener('click', onDocClick);
     return () => document.removeEventListener('click', onDocClick);
   }, []);
+
+  const handleLogout = () => {
+    AuthService.logout();
+    router.push('/login');
+  };
 
   return (
     <header className="flex items-center justify-between py-4 px-6 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700">
@@ -42,7 +50,13 @@ export default function Header({ username = 'John Doe', onToggleSidebar }: { use
             <div className="absolute right-0 mt-2 w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md shadow-lg z-20">
               <Link href="/settings" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">Settings</Link>
               <Link href="/help" className="block px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">Help</Link>
-              <button className="w-full text-left px-4 py-2 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700">Logout</button>
+              <button
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 flex items-center gap-2"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
+              </button>
             </div>
           )}
         </div>

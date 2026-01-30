@@ -3,10 +3,20 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
+import AuthService from '@/lib/api';
 
-export default function DashboardClient({ username = 'Jane Admin' }: { username?: string }) {
+export default function DashboardClient({ username: initialUsername = 'User' }: { username?: string }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
   const toggleSidebar = () => setSidebarOpen((s) => !s);
+
+  useEffect(() => {
+    const userData = AuthService.getUser();
+    if (userData) {
+      setUser(userData);
+    }
+  }, []);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -33,6 +43,21 @@ export default function DashboardClient({ username = 'Jane Admin' }: { username?
     };
   }, [sidebarOpen]);
 
+  const displayName = user ? `${user.first_name || ''} ${user.last_name || ''}`.trim() || user.email : initialUsername;
+  const firstName = user?.first_name || displayName.split(' ')[0];
+
+  // Compute initials: 1st letter of First Name + 1st letter of Last Name
+  const getInitials = () => {
+    if (!user) {
+      if (initialUsername === 'User') return 'U';
+      return initialUsername.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    }
+    const f = user.first_name?.[0] || '';
+    const l = user.last_name?.[0] || '';
+    return (f + l).toUpperCase() || user.email?.[0]?.toUpperCase() || 'U';
+  };
+  const initials = getInitials();
+
   return (
     <div className="flex">
       {/* Mobile overlay drawer (shown only on small screens) */}
@@ -57,7 +82,7 @@ export default function DashboardClient({ username = 'Jane Admin' }: { username?
       </div>
 
       <div className={`flex-1 min-h-screen flex flex-col transition-all duration-300 ${sidebarOpen ? 'lg:ml-64' : ''}`}>
-        <Header username={username} onToggleSidebar={toggleSidebar} />
+        <Header username={initials} onToggleSidebar={toggleSidebar} />
 
         <main className="p-6">
           {/* Top banner */}
@@ -66,7 +91,7 @@ export default function DashboardClient({ username = 'Jane Admin' }: { username?
               <div className="bg-gradient-to-r from-[#3e95e5] to-[#2d7bc9] text-white py-8 px-6">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
                   <div className="text-center md:text-left">
-                    <h1 className="text-xl md:text-2xl font-semibold">Welcome back, Jane</h1>
+                    <h1 className="text-xl md:text-2xl font-semibold">Welcome back, {firstName}</h1>
                     <p className="text-sm opacity-90 mt-1">Manage your documents, envelopes and templates</p>
                   </div>
 
@@ -86,7 +111,7 @@ export default function DashboardClient({ username = 'Jane Admin' }: { username?
               <div className="bg-white dark:bg-slate-800 rounded-lg shadow p-6">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Create your proposal</h3>
-                  <div className="text-sm text-slate-500 dark:text-slate-400">Hi Jane 👋</div>
+                  <div className="text-sm text-slate-500 dark:text-slate-400">Hi {firstName} 👋</div>
                 </div>
 
                 <div className="mt-4 p-4 border border-dashed border-slate-200 rounded-md bg-[#f3fbff] dark:bg-slate-800">

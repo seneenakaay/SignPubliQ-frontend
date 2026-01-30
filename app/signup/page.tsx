@@ -1,4 +1,5 @@
 import Signup from './SignupForm';
+import AuthRedirect from '../components/AuthRedirect';
 
 export const metadata = {
   title: 'Sign Up - SignPuliQ',
@@ -6,5 +7,10 @@ export const metadata = {
 };
 
 export default function SignupPage() {
-  return <Signup />;
+  return (
+    <>
+      <AuthRedirect />
+      <Signup />
+    </>
+  );
 }

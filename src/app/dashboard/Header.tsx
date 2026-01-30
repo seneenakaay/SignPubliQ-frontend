@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Bell, User, Settings, HelpCircle, LogOut, ChevronDown, Menu } from 'lucide-react';
-import AuthService from '@/lib/api';
+import * as AuthService from '@/services/auth.service';
 
 export default function Header({ username = 'John Doe', onToggleSidebar }: { username?: string; onToggleSidebar?: () => void }) {
   const [open, setOpen] = useState(false);

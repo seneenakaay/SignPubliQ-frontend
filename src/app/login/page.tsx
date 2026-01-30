@@ -1,5 +1,5 @@
 import LoginForm from './LoginForm';
-import AuthRedirect from '../components/AuthRedirect';
+import AuthRedirect from "@/components/auth/AuthRedirect";
 
 export const metadata = {
   title: 'Login - eSignHub',

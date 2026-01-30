@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Mail, Lock, Eye, EyeOff, Loader, X } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import AuthService from '../../lib/api';
+import * as AuthService from '../../services/auth.service';
 
 interface LoginFormData {
   email: string;

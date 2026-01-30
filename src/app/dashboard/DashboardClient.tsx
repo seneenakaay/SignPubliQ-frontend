@@ -3,11 +3,13 @@
 import { useState, useEffect } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import AuthService from '@/lib/api';
+import * as AuthService from '@/services/auth.service';
+import * as DashboardService from '@/services/dashboard.service';
 
 export default function DashboardClient({ username: initialUsername = 'User' }: { username?: string }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [stats, setStats] = useState<any>(null);
 
   const toggleSidebar = () => setSidebarOpen((s) => !s);
 
@@ -15,6 +17,11 @@ export default function DashboardClient({ username: initialUsername = 'User' }: 
     const userData = AuthService.getUser();
     if (userData) {
       setUser(userData);
+      console.log('[Dashboard] Fetching summary for user:', userData.user_id);
+      DashboardService.getSummary(userData.user_id).then(data => {
+        console.log('[Dashboard] Summary response:', data);
+        setStats(data);
+      });
     }
   }, []);
 
@@ -153,67 +160,67 @@ export default function DashboardClient({ username: initialUsername = 'User' }: 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="relative p-3 bg-[#f8fbff] rounded border border-slate-100 h-28 flex flex-col justify-center overflow-hidden hover:shadow-sm transition-transform transform hover:-translate-y-1">
                     <div className="absolute -top-4 -right-4 w-24 h-24 text-slate-300 opacity-10 pointer-events-none">
-                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M8 44c0-9 7-16 16-16s16 7 16 16"/></svg>
+                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M8 44c0-9 7-16 16-16s16 7 16 16" /></svg>
                     </div>
                     <div className="relative z-10">
                       <div className="text-xs text-slate-400">Drafts</div>
                       <div className="text-xs text-slate-500 mt-1">Not sent yet</div>
-                      <div className="text-lg font-semibold mt-2">1</div>
+                      <div className="text-lg font-semibold mt-2">{stats?.drafts_count || 0}</div>
                     </div>
                   </div>
 
                   <div className="relative p-3 bg-[#f8fbff] rounded border border-slate-100 h-28 flex flex-col justify-center overflow-hidden hover:shadow-sm transition-transform transform hover:-translate-y-1">
                     <div className="absolute -top-4 -right-4 w-24 h-24 text-slate-300 opacity-10 pointer-events-none">
-                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M8 32 L32 8 L56 32"/></svg>
+                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M8 32 L32 8 L56 32" /></svg>
                     </div>
                     <div className="relative z-10">
                       <div className="text-xs text-slate-400">Sent</div>
                       <div className="text-xs text-slate-500 mt-1">Waiting for signature</div>
-                      <div className="text-lg font-semibold mt-2">1</div>
+                      <div className="text-lg font-semibold mt-2">{stats?.sent_count || 0}</div>
                     </div>
                   </div>
 
                   <div className="relative p-3 bg-[#f8fbff] rounded border border-slate-100 h-28 flex flex-col justify-center overflow-hidden hover:shadow-sm transition-transform transform hover:-translate-y-1">
                     <div className="absolute -top-4 -right-4 w-24 h-24 text-slate-300 opacity-10 pointer-events-none">
-                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M16 32 L28 44 L48 20"/></svg>
+                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M16 32 L28 44 L48 20" /></svg>
                     </div>
                     <div className="relative z-10">
                       <div className="text-xs text-slate-400">Completed</div>
                       <div className="text-xs text-slate-500 mt-1">Signed</div>
-                      <div className="text-lg font-semibold mt-2">0</div>
+                      <div className="text-lg font-semibold mt-2">{stats?.completed_count || 0}</div>
                     </div>
                   </div>
 
                   <div className="relative p-3 bg-[#f8fbff] rounded border border-slate-100 h-28 flex flex-col justify-center overflow-hidden hover:shadow-sm transition-transform transform hover:-translate-y-1">
                     <div className="absolute -top-4 -right-4 w-24 h-24 text-slate-300 opacity-10 pointer-events-none">
-                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M20 20 L44 44 M44 20 L20 44" stroke="currentColor" strokeWidth="4"/></svg>
+                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M20 20 L44 44 M44 20 L20 44" stroke="currentColor" strokeWidth="4" /></svg>
                     </div>
                     <div className="relative z-10">
                       <div className="text-xs text-slate-400">Declined</div>
                       <div className="text-xs text-slate-500 mt-1">Declined by recipient</div>
-                      <div className="text-lg font-semibold mt-2">0</div>
+                      <div className="text-lg font-semibold mt-2">{stats?.declined_count || 0}</div>
                     </div>
                   </div>
 
                   <div className="relative p-3 bg-[#f8fbff] rounded border border-slate-100 h-28 flex flex-col justify-center overflow-hidden hover:shadow-sm transition-transform transform hover:-translate-y-1">
                     <div className="absolute -top-4 -right-4 w-24 h-24 text-slate-300 opacity-10 pointer-events-none">
-                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M32 12v20l10 6"/></svg>
+                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M32 12v20l10 6" /></svg>
                     </div>
                     <div className="relative z-10">
                       <div className="text-xs text-slate-400">Expired</div>
                       <div className="text-xs text-slate-500 mt-1">Past due</div>
-                      <div className="text-lg font-semibold mt-2">0</div>
+                      <div className="text-lg font-semibold mt-2">{stats?.expired_count || 0}</div>
                     </div>
                   </div>
 
                   <div className="relative p-3 bg-[#f8fbff] rounded border border-slate-100 h-28 flex flex-col justify-center overflow-hidden hover:shadow-sm transition-transform transform hover:-translate-y-1">
                     <div className="absolute -top-4 -right-4 w-24 h-24 text-slate-300 opacity-10 pointer-events-none">
-                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M12 20h40v28H12z M20 28h24"/></svg>
+                      <svg viewBox="0 0 64 64" fill="currentColor" className="w-full h-full"><path d="M12 20h40v28H12z M20 28h24" /></svg>
                     </div>
                     <div className="relative z-10">
                       <div className="text-xs text-slate-400">Total Envelope</div>
                       <div className="text-xs text-slate-500 mt-1">All envelopes</div>
-                      <div className="text-lg font-semibold mt-2">2</div>
+                      <div className="text-lg font-semibold mt-2">{stats?.total_envelopes || 0}</div>
                     </div>
                   </div>
                 </div>
@@ -245,7 +252,7 @@ export default function DashboardClient({ username: initialUsername = 'User' }: 
 
                             <div className="text-right">
                               <div className="text-sm font-semibold text-slate-900 dark:text-white">In {days} days</div>
-                              <div className="text-xs text-slate-400">{new Date(item.due).toLocaleDateString()}</div>
+                              <div className="text-xs text-slate-400" suppressHydrationWarning>{new Date(item.due).toLocaleDateString()}</div>
                             </div>
                           </div>
 
@@ -261,7 +268,7 @@ export default function DashboardClient({ username: initialUsername = 'User' }: 
                     <button className="text-sm text-[#2d7bc9] hover:underline">View all due dates</button>
                   </div>
                 </div>
-                </div>
+              </div>
 
               <section className="mt-6 bg-white dark:bg-slate-800 rounded-lg shadow p-6">
                 <div className="flex items-center justify-between">

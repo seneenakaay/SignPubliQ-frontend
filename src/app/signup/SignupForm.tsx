@@ -15,7 +15,7 @@ interface SignupFormData {
   verificationToken?: string;
 }
 
-import AuthService from '../../lib/api';
+import * as AuthService from '../../services/auth.service';
 
 interface PasswordStrength {
   score: number;
@@ -179,7 +179,7 @@ const Signup = () => {
     console.log('[Signup] Verifying email with OTP:', emailOTPCode);
 
     try {
-      const response = await AuthService.verifyEmail(formData.email, emailOTPCode);
+      const response = await AuthService.verifyEmail(formData.email, emailOTPCode) as any;
       console.log('[Signup] Email verification response:', response);
 
       // Assuming response contains verificationToken as per guide

@@ -1,9 +1,9 @@
-import Navbar from "./components/layout/Navbar";
-import Hero from "./components/home/Hero";
-import HowItWorks from "./components/home/HowItWorks";
-import Features from "./components/home/Features";
-import Footer from "./components/layout/Footer";
-import AuthRedirect from "./components/AuthRedirect";
+import Navbar from "@/components/layout/Navbar";
+import Hero from "@/components/home/Hero";
+import HowItWorks from "@/components/home/HowItWorks";
+import Features from "@/components/home/Features";
+import Footer from "@/components/layout/Footer";
+import AuthRedirect from "@/components/auth/AuthRedirect";
 
 export default function Home() {
   return (

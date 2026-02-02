@@ -14,6 +14,15 @@ type Envelope = {
   updatedOn: string;
   owner: string;
   status: EnvelopeStatus;
+  reminderSettings?: {
+    enabled: boolean;
+    frequency: number;
+  };
+  expirySettings?: {
+    enabled: boolean;
+    days: number;
+    expiresOn: string | null;
+  };
 };
 
 const mockEnvelopes: Envelope[] = [
@@ -183,6 +192,12 @@ export default function ManageClient() {
                     Owner
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    Reminders
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
+                    Expiry
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
                     Status
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase tracking-wider">
@@ -237,6 +252,34 @@ export default function ManageClient() {
                         {envelope.owner}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
+                        {envelope.reminderSettings?.enabled ? (
+                          <div className="flex items-center gap-1">
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+                              Every {envelope.reminderSettings.frequency}d
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-slate-400">Off</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {envelope.expirySettings?.enabled && envelope.expirySettings.expiresOn ? (
+                          <div className="flex flex-col">
+                            <span className="text-xs font-medium text-amber-600 dark:text-amber-400">
+                              {new Date(envelope.expirySettings.expiresOn).toLocaleDateString('en-US', {
+                                month: 'short',
+                                day: 'numeric',
+                              })}
+                            </span>
+                            <span className="text-xs text-slate-500 dark:text-slate-400">
+                              {envelope.expirySettings.days} days
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-xs text-slate-400">None</span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                             statusColors[envelope.status]
@@ -262,7 +305,7 @@ export default function ManageClient() {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={7} className="px-6 py-12 text-center">
+                    <td colSpan={9} className="px-6 py-12 text-center">
                       <div className="flex flex-col items-center gap-2">
                         <FileText className="w-12 h-12 text-slate-300 dark:text-slate-600" />
                         <p className="text-sm text-slate-500 dark:text-slate-400">

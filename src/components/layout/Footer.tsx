@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin } from 'lucide-react';
+import logo from '../../../public/logo.png';
 
 const Footer = () => {
     return (
@@ -11,13 +12,13 @@ const Footer = () => {
                     {/* Brand & Social */}
                     <div className="space-y-8">
                         <div className="flex items-center gap-3">
-                            <Image
-                                src="/logo.png"
-                                alt="SignPubliQ Logo"
-                                width={48}
-                                height={48}
-                                className="h-12 w-auto object-contain"
-                            />
+                            <Link href="/">
+                                <Image
+                                    src={logo}
+                                    alt="SignPubliQ Logo"
+                                    className="h-12 w-auto object-contain"
+                                />
+                            </Link>
                         </div>
                         <p className="text-sm leading-6 text-zinc-600 dark:text-zinc-400 max-w-sm">
                             Legally binding eSignatures with audit trails and compliance you can trust. anytime, anywhere.
@@ -43,7 +44,7 @@ const Footer = () => {
                     </div>
 
                     {/* Links */}
-                    <div className="mt-16 lg:mt-0">
+                    <div className="mt-16 lg:mt-0 lg:pl-16">
                         <h3 className="text-sm font-semibold leading-6 text-zinc-900 dark:text-zinc-50">Company</h3>
                         <ul role="list" className="mt-6 space-y-4">
                             <li>
@@ -90,7 +91,7 @@ const Footer = () => {
                 </div>
                 <div className="mt-16 border-t border-zinc-900/10 pt-8 sm:mt-20 lg:mt-24 dark:border-zinc-50/10">
                     <p className="text-xs leading-5 text-zinc-500 dark:text-zinc-500">
-                        &copy; 2026 SignPubliQ, Inc. All rights reserved.
+                        &copy; 2025 SignPubliQ, Inc. All rights reserved.
                     </p>
                 </div>
             </div>
